@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Charlotte — ERP</title>
+  <link rel="stylesheet" href="charlotte.css" />
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════════
+     LOGIN
+══════════════════════════════════════════════════════════════ -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="logo-mark">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 22V8l9-4 9 4v14"/><path d="M6 22v-8h12v8"/><path d="M10 22V14h4v8"/>
+        </svg>
+      </div>
+      <span class="logo-name">Charlotte</span>
+      <span class="logo-tagline">Gestão de Posto</span>
+    </div>
+
+    <span class="role-label">Selecione seu perfil</span>
+    <div class="role-grid">
+      <button type="button" id="role-frentista" class="role-btn active" onclick="selectRole('frentista')">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+        </svg>
+        Frentista
+      </button>
+      <button type="button" id="role-rh" class="role-btn" onclick="selectRole('rh')">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+        </svg>
+        RH / Admin
+      </button>
+    </div>
+
+    <div id="login-error" class="error-box">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
+        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      <span></span>
+    </div>
+
+    <form onsubmit="handleLogin(event)">
+      <div class="field" style="margin-bottom:1rem;">
+        <label for="login-email">Email</label>
+        <input id="login-email" type="email" placeholder="seu@email.com" required />
+      </div>
+      <div class="field">
+        <label for="login-password">Senha</label>
+        <input id="login-password" type="password" placeholder="••••••••" required />
+      </div>
+      <button type="submit" class="btn-login">Entrar</button>
+    </form>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     APP
+══════════════════════════════════════════════════════════════ -->
+<div id="app" style="display:flex;">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo-row">
+        <div class="sidebar-logo-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 22V8l9-4 9 4v14"/><path d="M6 22v-8h12v8"/><path d="M10 22V14h4v8"/>
+          </svg>
+        </div>
+        <div class="sidebar-logo-text">
+          <span class="s-name">Charlotte</span>
+          <span class="s-sub">Gestão</span>
+        </div>
+      </div>
+      <span id="sidebar-user-name">—</span>
+      <span id="sidebar-user-role">—</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <span class="nav-section-label">Gestão</span>
+
+      <!-- NAV RH -->
+      <ul class="nav-list" id="nav-rh" style="display:none;">
+        <li><button class="nav-item" data-route="dashboard" onclick="navigate('dashboard')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Dashboard
+        </button></li>
+        <li><button class="nav-item" data-route="funcionarios" onclick="navigate('funcionarios')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Funcionários
+        </button></li>
+        <li><button class="nav-item" data-route="comissoes" onclick="navigate('comissoes')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          Comissões
+        </button></li>
+        <li><button class="nav-item" data-route="fraudes" onclick="navigate('fraudes')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Fraudes
+        </button></li>
+        <li><button class="nav-item" data-route="estoque" onclick="navigate('estoque')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+          Armazém
+        </button></li>
+        <li><button class="nav-item" data-route="relatorios" onclick="navigate('relatorios')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#EC4899" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+          Relatórios
+        </button></li>
+        <li><button class="nav-item" data-route="estatisticas" onclick="navigate('estatisticas')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          Estatísticas
+        </button></li>
+        <li><button class="nav-item" data-route="logs" onclick="navigate('logs')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="12 8 12 12 14 14"/><path d="M3.05 11a9 9 0 1 1 .5 4"/><polyline points="3 16 3 11 8 11"/></svg>
+          Logs
+        </button></li>
+        <li><button class="nav-item" data-route="chat" onclick="navigate('chat')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A8E6CF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Chat
+        </button></li>
+        <li><button class="nav-item" data-route="configuracoes" onclick="navigate('configuracoes')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6C757D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          Configurações
+        </button></li>
+      </ul>
+
+      <!-- NAV FRENTISTA -->
+      <ul class="nav-list" id="nav-frentista" style="display:none;">
+        <li><button class="nav-item" data-route="dashboard" onclick="navigate('dashboard')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Dashboard
+        </button></li>
+        <li><button class="nav-item" data-route="registrar-venda" onclick="navigate('registrar-venda')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          Registrar Venda
+        </button></li>
+        <li><button class="nav-item" data-route="minhas-vendas" onclick="navigate('minhas-vendas')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1-2-1z"/><line x1="8" y1="9" x2="16" y2="9"/><line x1="8" y1="13" x2="16" y2="13"/></svg>
+          Minhas Vendas
+        </button></li>
+        <li><button class="nav-item" data-route="comissao" onclick="navigate('comissao')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          Comissão
+        </button></li>
+        <li><button class="nav-item" data-route="avisos" onclick="navigate('avisos')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#EC4899" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          Avisos
+        </button></li>
+        <li><button class="nav-item" data-route="chat" onclick="navigate('chat')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A8E6CF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Chat da Equipe
+        </button></li>
+      </ul>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button class="nav-item" onclick="handleLogout()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A8E6CF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Sair
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- DASHBOARD -->
+    <div id="view-dashboard" class="view"></div>
+
+    <!-- FUNCIONÁRIOS -->
+    <div id="view-funcionarios" class="view"></div>
+
+    <!-- COMISSÕES (RH) -->
+    <div id="view-comissoes" class="view"></div>
+
+    <!-- FRAUDES -->
+    <div id="view-fraudes" class="view"></div>
+
+    <!-- ARMAZÉM -->
+    <div id="view-estoque" class="view">
+      <div class="page-header"><h1 class="page-title">Armazém</h1></div>
+      <div class="stat-grid g3 mb-3">
+        <div class="stat-card"><div class="stat-card-header"><span class="stat-label">Total de Produtos</span><div class="stat-icon" style="background:rgba(16,185,129,0.1);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg></div></div><p class="stat-value">12</p><p class="stat-sub">itens cadastrados</p></div>
+        <div class="stat-card"><div class="stat-card-header"><span class="stat-label">Estoque Baixo</span><div class="stat-icon" style="background:rgba(220,53,69,0.1);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DC3545" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div></div><p class="stat-value" style="color:#DC3545;">2</p><p class="stat-sub">produtos abaixo do mínimo</p></div>
+        <div class="stat-card"><div class="stat-card-header"><span class="stat-label">Valor em Estoque</span><div class="stat-icon" style="background:rgba(212,175,55,0.1);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div></div><p class="stat-value">R$ 48k</p><p class="stat-sub">valor total</p></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Produtos</span></div>
+        <div class="tbl-wrap"><table>
+          <thead><tr><th>Produto</th><th class="tr">Estoque</th><th class="tr">Mín.</th><th class="tr">Preço Unit.</th><th class="tc">Status</th></tr></thead>
+          <tbody>
+            <tr><td>Gasolina Comum</td><td class="tr">12.000 L</td><td class="tr">5.000 L</td><td class="tr">R$ 7,00</td><td class="tc"><span class="badge b-active">OK</span></td></tr>
+            <tr><td>Gasolina Aditivada</td><td class="tr">8.500 L</td><td class="tr">3.000 L</td><td class="tr">R$ 7,50</td><td class="tc"><span class="badge b-active">OK</span></td></tr>
+            <tr><td>Etanol</td><td class="tr">1.200 L</td><td class="tr">2.000 L</td><td class="tr">R$ 5,00</td><td class="tc"><span class="badge b-inactive">Baixo</span></td></tr>
+            <tr><td>Diesel S10</td><td class="tr">800 L</td><td class="tr">3.000 L</td><td class="tr">R$ 6,50</td><td class="tc"><span class="badge b-inactive">Baixo</span></td></tr>
+            <tr><td>Óleo Lubrificante</td><td class="tr">340 un</td><td class="tr">100 un</td><td class="tr">R$ 28,00</td><td class="tc"><span class="badge b-active">OK</span></td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- RELATÓRIOS -->
+    <div id="view-relatorios" class="view">
+      <div class="page-header"><h1 class="page-title">Relatórios</h1><button class="btn btn-primary">Gerar Relatório</button></div>
+      <div class="stat-grid g3 mb-3">
+        <div class="stat-card"><div class="stat-card-header"><span class="stat-label">Faturamento Mensal</span></div><p class="stat-value" style="color:#2D5F47;">R$ 48.320</p><p class="stat-sub">setembro 2026</p></div>
+        <div class="stat-card"><div class="stat-card-header"><span class="stat-label">Total de Vendas</span></div><p class="stat-value">186</p><p class="stat-sub">transações no mês</p></div>
+        <div class="stat-card"><div class="stat-card-header"><span class="stat-label">Ticket Médio</span></div><p class="stat-value">R$ 259</p><p class="stat-sub">por venda</p></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Relatórios Disponíveis</span></div>
+        <div class="card-body">
+          <div style="display:flex;flex-direction:column;gap:0.75rem;">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:0.875rem 1rem;border:1px solid var(--border);border-radius:0.5rem;"><div><p style="font-size:0.875rem;">Relatório de Vendas — Setembro 2026</p><p style="font-size:0.75rem;color:var(--muted);">Gerado em 13/09/2026</p></div><button class="btn btn-outline btn-sm">Exportar PDF</button></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:0.875rem 1rem;border:1px solid var(--border);border-radius:0.5rem;"><div><p style="font-size:0.875rem;">Relatório de Comissões — Setembro 2026</p><p style="font-size:0.75rem;color:var(--muted);">Gerado em 13/09/2026</p></div><button class="btn btn-outline btn-sm">Exportar PDF</button></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:0.875rem 1rem;border:1px solid var(--border);border-radius:0.5rem;"><div><p style="font-size:0.875rem;">Relatório de Estoque — Setembro 2026</p><p style="font-size:0.75rem;color:var(--muted);">Gerado em 13/09/2026</p></div><button class="btn btn-outline btn-sm">Exportar PDF</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ESTATÍSTICAS -->
+    <div id="view-estatisticas" class="view"></div>
+
+    <!-- LOGS -->
+    <div id="view-logs" class="view">
+      <div class="page-header"><h1 class="page-title">Logs do Sistema</h1></div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Histórico de Atividades</span></div>
+        <div id="logs-list"></div>
+      </div>
+    </div>
+
+    <!-- CHAT -->
+    <div id="view-chat" class="view">
+      <div class="page-header"><h1 class="page-title">Chat da Equipe</h1></div>
+      <div class="chat-wrap">
+        <div class="chat-messages" id="chat-messages"></div>
+        <form class="chat-input-row" onsubmit="sendChatMessage(event)">
+          <input id="chat-input" type="text" placeholder="Mensagem..." autocomplete="off" />
+          <button type="submit" class="btn btn-primary">Enviar</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- CONFIGURAÇÕES -->
+    <div id="view-configuracoes" class="view">
+      <div class="page-header"><h1 class="page-title">Configurações</h1></div>
+      <div class="card">
+        <div class="card-body">
+          <div class="config-section">
+            <h2>Notificações</h2>
+            <div class="config-row"><div><label>Alertas de estoque</label><p><span>Receber notificação quando o estoque estiver baixo</span></p></div><button class="toggle" onclick="this.classList.toggle('off')"></button></div>
+            <div class="config-row"><div><label>Alertas de fraude</label><p><span>Receber notificação de transações suspeitas</span></p></div><button class="toggle" onclick="this.classList.toggle('off')"></button></div>
+            <div class="config-row"><div><label>Relatório diário</label><p><span>Receber resumo diário por email</span></p></div><button class="toggle off" onclick="this.classList.toggle('off')"></button></div>
+          </div>
+          <div class="config-section">
+            <h2>Sistema</h2>
+            <div class="config-row"><label>Taxa de comissão padrão</label><span>5% por venda</span></div>
+            <div class="config-row"><label>Fuso horário</label><span>América/São Paulo (GMT-3)</span></div>
+            <div class="config-row"><label>Versão</label><span>Charlotte v1.0.0</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REGISTRAR VENDA (FRENTISTA) -->
+    <div id="view-registrar-venda" class="view">
+      <div class="page-header"><h1 class="page-title">Registrar Venda</h1></div>
+      <div class="card" style="max-width:640px;">
+        <div class="card-header"><span class="card-title">Nova Venda</span></div>
+        <div class="card-body">
+          <form onsubmit="handleSaleSubmit(event)">
+            <p style="font-size:0.8rem;color:var(--muted);margin-bottom:0.75rem;">Selecione o combustível</p>
+            <div class="fuel-grid">
+              <button type="button" class="fuel-btn" data-pid="p1" onclick="selectProduct('p1')"><div class="f-name">Gasolina Comum</div><div class="f-price">R$ 7,00/L</div></button>
+              <button type="button" class="fuel-btn" data-pid="p2" onclick="selectProduct('p2')"><div class="f-name">Gasolina Aditivada</div><div class="f-price">R$ 7,50/L</div></button>
+              <button type="button" class="fuel-btn" data-pid="p3" onclick="selectProduct('p3')"><div class="f-name">Etanol</div><div class="f-price">R$ 5,00/L</div></button>
+              <button type="button" class="fuel-btn" data-pid="p4" onclick="selectProduct('p4')"><div class="f-name">Diesel S10</div><div class="f-price">R$ 6,50/L</div></button>
+            </div>
+            <div class="field" style="margin-bottom:1rem;">
+              <label>Quantidade (litros)</label>
+              <input id="s-qty" type="number" step="0.01" min="0.01" placeholder="0,00" oninput="updateSaleCalc()" required />
+            </div>
+            <div class="sale-result">
+              <div class="sale-result-item"><div class="sale-result-label">Total da Venda</div><div class="sale-result-value" id="s-total">R$ 0,00</div></div>
+              <div class="sale-result-item"><div class="sale-result-label">Sua Comissão (5%)</div><div class="sale-result-value tg" id="s-comm">R$ 0,00</div></div>
+            </div>
+            <div style="margin-top:1.25rem;text-align:right;">
+              <button type="submit" class="btn btn-success">Confirmar Venda</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- MINHAS VENDAS (FRENTISTA) -->
+    <div id="view-minhas-vendas" class="view"></div>
+
+    <!-- COMISSÃO (FRENTISTA) -->
+    <div id="view-comissao" class="view"></div>
+
+    <!-- AVISOS (FRENTISTA) -->
+    <div id="view-avisos" class="view">
+      <div class="page-header"><h1 class="page-title">Avisos</h1></div>
+      <div class="aviso-card"><div class="aviso-dot" style="background:#DC3545;"></div><div><p class="aviso-title">Bico 3 — Manutenção Programada</p><p class="aviso-body">O bico 3 estará em manutenção na quinta-feira das 08h às 12h. Por favor, direcione os clientes para os bicos 1, 2 e 4.</p><p class="aviso-date">13/09/2026 — Gestão</p></div></div>
+      <div class="aviso-card"><div class="aviso-dot" style="background:#D4AF37;"></div><div><p class="aviso-title">Reunião de Equipe</p><p class="aviso-body">Reunião mensal de equipe nesta sexta às 17h30 na sala de reuniões. Presença obrigatória.</p><p class="aviso-date">12/09/2026 — RH</p></div></div>
+      <div class="aviso-card"><div class="aviso-dot" style="background:#1B4332;"></div><div><p class="aviso-title">Novo Procedimento de Fechamento de Turno</p><p class="aviso-body">A partir desta semana, o fechamento de turno deve ser realizado no sistema até 15 minutos antes do fim do turno. Verifique o manual atualizado.</p><p class="aviso-date">10/09/2026 — Gestão</p></div></div>
+    </div>
+
+  </main>
+</div>
+
+<script src="charlotte.js"></script>
+</body>
+</html>
